@@ -44,41 +44,41 @@ public class Player : MonoBehaviour
         }
     }
     // check for collision
-    private void OnControllerColliderHit(ControllerColliderHit hit)
+    void OnTriggerEnter(Collider otherCollider)
     {
-        if (hit.collider.GetComponent<AmmoCrate>() != null)
+        if (otherCollider.GetComponent<AmmoCrate>() != null)
         {
             // collect ammoCreate.
-            AmmoCrate ammoCrate = hit.collider.GetComponent<AmmoCrate>();
+            AmmoCrate ammoCrate = otherCollider.GetComponent<AmmoCrate>();
             ammo += ammoCrate.ammo;
             Destroy(ammoCrate.gameObject);
         }
         if (!isHurt)
         {
             GameObject hazard = null;
-            if (hit.collider.GetComponent<Enemy>() != null)
+            if (otherCollider.GetComponent<Enemy>() != null)
             {
 
-                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                Enemy enemy = otherCollider.GetComponent<Enemy>();
                 hazard = enemy.gameObject;
                 health -= enemy.damage;
                 //isHurt = true;
 
             }
-            else if (hit.collider.GetComponent<Bullet>() != null)
+            else if (otherCollider.GetComponent<Bullet>() != null)
             {
-                Bullet bullet = hit.collider.GetComponent<Bullet>();
+                Bullet bullet = otherCollider.GetComponent<Bullet>();
                 if (bullet.ShotByPlayer == false)
                 {
                     hazard = bullet.gameObject;
                     health -= bullet.damage;
-                    //isHurt = true;
+                    bullet.gameObject.SetActive(false);
+
                 }
             }
             if (hazard != null)
             {
                 isHurt = true;
-
                 // knock back effect
                 Vector3 hurtDirection = (transform.position - hazard.transform.position).normalized;
                 Vector3 knockbackDirection = (hurtDirection + Vector3.up).normalized;
