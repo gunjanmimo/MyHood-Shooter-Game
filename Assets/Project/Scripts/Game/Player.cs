@@ -7,7 +7,14 @@ public class Player : MonoBehaviour
     [Header("Visuals")]
     public Camera playerCamera;
     [Header("Gameplay")]
+
+    public int initialHealth = 100;
     public int initialAmmo = 12;
+
+    private int health;
+    public int Health { get { return health; } }
+
+
     private int ammo;
     public int Ammo
     {
@@ -16,6 +23,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = initialHealth;
         ammo = initialAmmo;
     }
 

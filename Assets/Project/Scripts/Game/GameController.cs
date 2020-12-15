@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 public class GameController : MonoBehaviour
@@ -8,15 +9,13 @@ public class GameController : MonoBehaviour
     public Player player;
     [Header("User Interface")]
     public Text ammoText;
-    // Start is called before the first frame update
-    void Start()
-    {
+    public Text healthText;
 
-    }
 
     // Update is called once per frame
     void Update()
     {
+        healthText.text = "Health: " + player.Health;
         ammoText.text = "Ammo: " + player.Ammo;
     }
 }
