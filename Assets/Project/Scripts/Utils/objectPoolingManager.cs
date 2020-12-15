@@ -25,18 +25,20 @@ public class objectPoolingManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    public GameObject getBullet()
+    public GameObject getBullet(bool shotByPlayer)
     {
         foreach (GameObject bullet in bullets)
         {
             if (!bullet.activeInHierarchy)
             {
                 bullet.SetActive(true);
+                bullet.GetComponent<Bullet>().ShotByPlayer = shotByPlayer;
                 return bullet;
             }
         }
         GameObject prefabInstance = Instantiate(bulletPrefab);
         prefabInstance.transform.SetParent(transform);
+        prefabInstance.GetComponent<Bullet>().ShotByPlayer = shotByPlayer;
         bullets.Add(prefabInstance);
         return prefabInstance;
     }

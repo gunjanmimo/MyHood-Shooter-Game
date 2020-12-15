@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -36,7 +37,7 @@ public class Player : MonoBehaviour
             if (ammo > 0)
             {
                 ammo--;
-                GameObject bulletObject = objectPoolingManager.Instance.getBullet();
+                GameObject bulletObject = objectPoolingManager.Instance.getBullet(true);
                 bulletObject.transform.position = playerCamera.transform.position + playerCamera.transform.forward;
                 bulletObject.transform.forward = playerCamera.transform.forward;
             }
@@ -52,15 +53,34 @@ public class Player : MonoBehaviour
             ammo += ammoCrate.ammo;
             Destroy(ammoCrate.gameObject);
         }
-        else if (hit.collider.GetComponent<Enemy>() != null)
+        if (!isHurt)
         {
-            if (!isHurt)
+            GameObject hazard = null;
+            if (hit.collider.GetComponent<Enemy>() != null)
             {
+
                 Enemy enemy = hit.collider.GetComponent<Enemy>();
+                hazard = enemy.gameObject;
                 health -= enemy.damage;
+                //isHurt = true;
+
+            }
+            else if (hit.collider.GetComponent<Bullet>() != null)
+            {
+                Bullet bullet = hit.collider.GetComponent<Bullet>();
+                if (bullet.ShotByPlayer == false)
+                {
+                    hazard = bullet.gameObject;
+                    health -= bullet.damage;
+                    //isHurt = true;
+                }
+            }
+            if (hazard != null)
+            {
                 isHurt = true;
+
                 // knock back effect
-                Vector3 hurtDirection = (transform.position - enemy.transform.position).normalized;
+                Vector3 hurtDirection = (transform.position - hazard.transform.position).normalized;
                 Vector3 knockbackDirection = (hurtDirection + Vector3.up).normalized;
 
                 GetComponent<ForceReceiver>().AddForce(knockbackDirection, knockBackForce);
@@ -73,5 +93,6 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(hurtDuration);
         isHurt = false;
+
     }
 }
