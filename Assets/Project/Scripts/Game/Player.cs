@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Jobs;
 using UnityEngine;
@@ -22,6 +23,8 @@ public class Player : MonoBehaviour
         get { return ammo; }
     }
     private bool isHurt;
+    private bool killed;
+    public bool kill { get { return killed; } }
     // Start is called before the first frame update
     void Start()
     {
@@ -34,7 +37,7 @@ public class Player : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (ammo > 0)
+            if (ammo > 0 && killed == false)
             {
                 ammo--;
                 GameObject bulletObject = objectPoolingManager.Instance.getBullet(true);
@@ -53,6 +56,13 @@ public class Player : MonoBehaviour
             ammo += ammoCrate.ammo;
             Destroy(ammoCrate.gameObject);
         }
+        else if (otherCollider.GetComponent<HealthCrate>() != null)
+        {
+            // collect healthCreate.
+            HealthCrate healthCrate = otherCollider.GetComponent<HealthCrate>();
+            health += healthCrate.health;
+            Destroy(healthCrate.gameObject);
+        }
         if (!isHurt)
         {
             GameObject hazard = null;
@@ -60,10 +70,12 @@ public class Player : MonoBehaviour
             {
 
                 Enemy enemy = otherCollider.GetComponent<Enemy>();
-                hazard = enemy.gameObject;
-                health -= enemy.damage;
-                //isHurt = true;
+                if (enemy.kill == false)
+                {
+                    hazard = enemy.gameObject;
+                    health -= enemy.damage;
 
+                }
             }
             else if (otherCollider.GetComponent<Bullet>() != null)
             {
@@ -87,8 +99,23 @@ public class Player : MonoBehaviour
                 GetComponent<Rigidbody>().AddForce(knockbackDirection * knockBackForce);
                 StartCoroutine(HurtRoutine());
             }
+            if (health <= 0)
+            {
+                if (killed == false)
+                {
+                    killed = true;
+                    OnKill();
+                }
+            }
         }
     }
+
+    private void OnKill()
+    {
+        GetComponent<CharacterController>().enabled = false;
+        GetComponent<UnityStandardAssets.Characters.FirstPerson.FirstPersonController>().enabled = false;
+    }
+
     IEnumerator HurtRoutine()
     {
         yield return new WaitForSeconds(hurtDuration);
