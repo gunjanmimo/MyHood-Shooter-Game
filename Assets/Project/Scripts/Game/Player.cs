@@ -46,9 +46,15 @@ public class Player : MonoBehaviour
     {
         if (hit.collider.GetComponent<AmmoCrate>() != null)
         {
+            // collect ammoCreate.
             AmmoCrate ammoCrate = hit.collider.GetComponent<AmmoCrate>();
             ammo += ammoCrate.ammo;
             Destroy(ammoCrate.gameObject);
+        }
+        else if (hit.collider.GetComponent<Enemy>() != null)
+        {
+            Enemy enemy = hit.collider.GetComponent<Enemy>();
+            health -= enemy.damage;
         }
     }
 }
