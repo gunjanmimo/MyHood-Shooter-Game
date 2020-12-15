@@ -33,4 +33,14 @@ public class Player : MonoBehaviour
             }
         }
     }
+    // check for collision
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (hit.collider.GetComponent<AmmoCrate>() != null)
+        {
+            AmmoCrate ammoCrate = hit.collider.GetComponent<AmmoCrate>();
+            ammo += ammoCrate.ammo;
+            Destroy(ammoCrate.gameObject);
+        }
+    }
 }
