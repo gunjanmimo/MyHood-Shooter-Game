@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class Enemy : MonoBehaviour
 {
     public int health;
     public int damage = 5;
-    // Start is called before the first frame update
+    private bool killed = false;
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Bullet>() != null)
@@ -18,9 +19,14 @@ public class Enemy : MonoBehaviour
                 bullet.gameObject.SetActive(false);
                 if (health <= 0)
                 {
-                    Destroy(gameObject);
+                    if (!killed)
+                    {
+                        killed = true;
+                        onKill();
+                    }
                 }
             }
         }
     }
+    protected virtual void onKill() { }
 }
