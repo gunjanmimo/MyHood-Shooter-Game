@@ -10,16 +10,17 @@ public class Player : MonoBehaviour
 
     public int initialHealth = 100;
     public int initialAmmo = 12;
-
+    public float knockBackForce = 10;
     private int health;
     public int Health { get { return health; } }
-
+    public float hurtDuration = 0.5f;
 
     private int ammo;
     public int Ammo
     {
         get { return ammo; }
     }
+    private bool isHurt;
     // Start is called before the first frame update
     void Start()
     {
@@ -53,8 +54,24 @@ public class Player : MonoBehaviour
         }
         else if (hit.collider.GetComponent<Enemy>() != null)
         {
-            Enemy enemy = hit.collider.GetComponent<Enemy>();
-            health -= enemy.damage;
+            if (!isHurt)
+            {
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                health -= enemy.damage;
+                isHurt = true;
+                // knock back effect
+                Vector3 hurtDirection = (transform.position - enemy.transform.position).normalized;
+                Vector3 knockbackDirection = (hurtDirection + Vector3.up).normalized;
+
+                GetComponent<ForceReceiver>().AddForce(knockbackDirection, knockBackForce);
+                GetComponent<Rigidbody>().AddForce(knockbackDirection * knockBackForce);
+                StartCoroutine(HurtRoutine());
+            }
         }
+    }
+    IEnumerator HurtRoutine()
+    {
+        yield return new WaitForSeconds(hurtDuration);
+        isHurt = false;
     }
 }

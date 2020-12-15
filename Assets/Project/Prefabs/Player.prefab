@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 6886690544078853631}
   - component: {fileID: 6886690544080383871}
   - component: {fileID: 6886690544937508016}
+  - component: {fileID: 3785976388423222302}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -396,8 +397,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 6886690544073864383}
-  bulletPrefab: {fileID: 4264495957760241447, guid: c794778f51acd4e148b68f899b3771d4,
-    type: 3}
+  initialHealth: 100
+  initialAmmo: 12
+  knockBackForce: 100
+  hurtDuration: 0.5
+--- !u!114 &3785976388423222302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6886690544073799327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76fefe95b09304e47b84df6f76428f17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deceleration: 5
+  mass: 3
 --- !u!1 &6886690545190036947
 GameObject:
   m_ObjectHideFlags: 0
