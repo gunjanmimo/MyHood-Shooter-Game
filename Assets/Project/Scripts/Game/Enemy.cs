@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public int health;
     public int damage = 5;
     private bool killed = false;
+    public bool kill { get { return killed; } }
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Bullet>() != null)
