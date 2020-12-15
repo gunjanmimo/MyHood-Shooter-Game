@@ -9,6 +9,10 @@ public class Player : MonoBehaviour
     [Header("Gameplay")]
     public int initialAmmo = 12;
     private int ammo;
+    public int Ammo
+    {
+        get { return ammo; }
+    }
     // Start is called before the first frame update
     void Start()
     {
