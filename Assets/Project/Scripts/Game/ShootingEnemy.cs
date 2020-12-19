@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class ShootingEnemy : Enemy
 {
+    public AudioSource deathSound;
     public float shootingInterval = 4f;
     public float shootingDistance = 3f;
     public float chasingInterval = 2f;
@@ -52,6 +53,7 @@ public class ShootingEnemy : Enemy
     protected override void onKill()
     {
         base.onKill();
+        deathSound.Play();
         agent.enabled = false;
         this.enabled = false;
         transform.localEulerAngles = new Vector3(10, transform.localEulerAngles.y, transform.localEulerAngles.z);

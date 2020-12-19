@@ -9,8 +9,6 @@ public class HealthCrate : MonoBehaviour
     public float rotationSpeed = 180f;
     [Header("Gameplay")]
     public int health = 50;
-
-
     // Update is called once per frame
     void Update()
     {
